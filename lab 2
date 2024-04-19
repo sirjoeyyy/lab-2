@@ -26,11 +26,11 @@
         "Vnet01AddressPrefix" : "192.168.0.0/16",  
         "Vnet02AddressPrefix" : "10.0.0.0/16",
         "Vnet01Subnet1Address": "192.168.0.32/28",
-        "Vnet01Subnet2Address":"192.168.0.16/28",
+        "Vnet01Subnet2Address": "192.168.0.16/28",
         "Vnet02SubnetAddress": "10.0.0.16/28",
         "Vnet1Subnet1NSG": "Vnet1NSG1",
         "Vnet1Subnet2NSG": "Vnet1NSG2",
-         "Vnet02Subnet1NSG": "Vnet2NSG",
+        "Vnet02Subnet1NSG": "Vnet2NSG",
         
 
         
@@ -236,3 +236,26 @@ prac west:
     ],
     "outputs": {}
 }
+
+
+
+Storage
+NB: redundancy = sku>name>e.g) LRS,ZRS,GRS, and  etc 
+know your type of storage, 
+thunk of what you are selecting it for
+
+
+VM
+- create others first, then when you create vm later you just delete the previous
+- linking resoucres
+- try to have them in a order
+- 
+
+Test
+- selective within vnet peering
+- gives us a sceniro
+- undetan the case
+- resuorces will be given
+- 
+
+SKILL & QUALIFICATION !!!
