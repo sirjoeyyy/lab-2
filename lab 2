@@ -1,0 +1,238 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualNetwork2Name"  : { 
+            "defaultVaule" : "vnet02" 
+            
+        },
+        "vnet1Location": {
+            "type": "string",
+            "defaultVaule" : "East US" 
+
+        },
+        "vnet2Location": {
+            "type": "string",
+            "defaultValue" : "West US"
+        }
+
+
+    },
+    "functions": [],
+    "variables": {
+        "Vnet01Subnet1Name" : "SandboxSubnet",
+        "Vnet01Subnet2Name" : "WorkloadSubnet",
+        "Vnet02SubnetName" : "WorkloadSubnet", 
+        "Vnet01AddressPrefix" : "192.168.0.0/16",  
+        "Vnet02AddressPrefix" : "10.0.0.0/16",
+        "Vnet01Subnet1Address": "192.168.0.32/28",
+        "Vnet01Subnet2Address":"192.168.0.16/28",
+        "Vnet02SubnetAddress": "10.0.0.16/28",
+        "Vnet1Subnet1NSG": "Vnet1NSG1",
+        "Vnet1Subnet2NSG": "Vnet1NSG2",
+         "Vnet02Subnet1NSG": "Vnet2NSG",
+        
+
+        
+
+
+    },
+    "resources": [
+      {
+        "name": "[parameters('virtualNetwork2Name')]",
+        "type": "Microsoft.Network/virtualNetworks",
+        "apiVersion": "2023-04-01",
+        "location": "[resourceGroup().location]",
+        "tags": {
+            "displayName": "[parameters('virtualNetwork2Name')]"
+        },
+        "properties": {
+            "addressSpace": {
+                "addressPrefixes": [
+                    "[variables('Vnet01AddressPrefix')]"
+                ]
+            },
+            "subnets": [
+                {
+                    "name": "[variables('Vnet01Subnet1Name')]",
+                    "properties": {
+                        "addressPrefix": "[variables('Vnet01Subnet1Address')]"
+                    }
+                },
+                {
+                    "name": "[variables('Vnet01Subnet2Name')]",
+                    "properties": {
+                        "addressPrefix": "[variables('Vnet01Subnet2Address')]"
+                    }
+                }
+            ]
+        }
+      },
+
+     {
+        "name": "[parameters('virtualNetwork2Name')]",
+        "type": "Microsoft.Network/virtualNetworks",
+        "apiVersion": "2023-04-01",
+        "location": "[resourceGroup().location]",
+        "tags": {
+            "displayName": "[parameters('virtualNetwork2Name')]"
+        },
+        "properties": {
+            "addressSpace": {
+                "addressPrefixes": [
+                    "[variables('Vnet02AddressPrefix')]"
+                ]
+            },
+            "subnets": [
+                {
+                    "name": "[variables('Vnet02SubnetName')]",
+                    "properties": {
+                        "addressPrefix": "[variables('Vnet02SubnetAddress'))]"
+                    }
+                }
+                
+            ]
+        }
+     },
+
+   {
+    "name": "[variables('Vnet01Subnet1NSG')]",
+    "type": "Microsoft.Network/networkSecurityGroups",
+    "apiVersion": "2023-04-01",
+    "location": "[resourceGroup().location]",
+    "properties": {
+        "securityRules": [
+            {
+                "name": "nsgRule1",
+                "properties": {
+                    "description": "description",
+                    "protocol": "Tcp",
+                    "sourcePortRange": "nsgRuleDesciption",
+                    "destinationPortRange": "22",
+                    "sourceAddressPrefix": "[variables('Vnet01AddressPrefix')]",
+                    "destinationAddressPrefix": "[variables('Vnet01AddressPrefix')]",
+                    "access": "Allow",
+                    "priority": 100,
+                    "direction": "Inbound"
+                }
+            }
+        ]
+    }
+   },
+ {
+    "type": "Microsoft.Network/networkSecurityGroups",
+    "apiVersion": "2023-04-01",
+    "location": "[resourceGroup().location]",
+    "properties": {
+        "securityRules": [
+            {
+                "name": "nsgRule2",
+                "properties": {
+                    "description": "description",
+                    "protocol": "Tcp",
+                    "sourcePortRange": "*",
+                    "destinationPortRange": "*",
+                    "sourceAddressPrefix": "[variables('Vnet01AddressPrefix')]",
+                    "destinationAddressPrefix": "[variables('Vnet01AddressPrefix')]",
+                    "access": "Allow",
+                    "priority": 100,
+                    "direction": "Inbound"
+                }
+            }
+        ]
+    }
+ }
+    ],
+    "outputs": {}
+}
+
+prac eat:
+
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "functions": [],
+    "variables": {},
+    "resources": [
+    {
+        "name": "East_US",
+        "type": "Microsoft.Network/virtualNetworks",
+        "apiVersion": "2023-04-01",
+        "location": "[resourceGroup().location]",
+        "tags": {
+            "displayName": "East_US"
+        },
+        "properties": {
+            "addressSpace": {
+                "addressPrefixes": [
+                    "10.0.0.0/16"
+                ]
+            },
+            "subnets": [
+                {
+                    "name": "JumpBox_Subnet",
+                    "properties": {
+                        "addressPrefix": "10.0.1.0/24"
+                    }
+                },
+                {
+                    "name": "Workload_Subnet",
+                    "properties": {
+                        "addressPrefix": "10.0.2.0/24"
+                    }
+                },
+                {
+                    "name": "Gateway_Subnet",
+                    "properties": {
+                        "addressPrefix": "10.0.0.0/28"
+                    }
+                }
+            ]
+        }
+    }
+    ],
+    "outputs": {}
+}
+
+prac west:
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "functions": [],
+    "variables": {},
+    "resources": [
+      {
+        "name": "West_us",
+        "type": "Microsoft.Network/virtualNetworks",
+        "apiVersion": "2023-04-01",
+        "location": "[resourceGroup().location]",
+        "tags": {
+            "displayName": "West_us"
+        },
+        "properties": {
+            "addressSpace": {
+                "addressPrefixes": [
+                    "10.0.0.0/16"
+                ]
+            },
+            "subnets": [
+                {
+                    "name": "Subnet-1",
+                    "properties": {
+                        "addressPrefix": "10.1.0.0/28"
+                    }
+                },
+                {
+                    "name": "Subnet-2",
+                    "properties": {
+                        "addressPrefix": "10.1NN.1.0/24"
+                    }
+                }
+            ]
+        }
+      }
+    ],
+    "outputs": {}
+}
